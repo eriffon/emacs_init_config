@@ -165,7 +165,6 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
  			       "h:/GTD/timesheet_2021.org"
  			       "h:/GTD/ausbildung.org"
  			       "h:/GTD/verwaltung.org"
-			       "h:/Projekte/Aufgaben/1804-4D-SVP/1-Admin/13-Work_plan/4dsvp_plan.org"
  			       "h:/GTD/ARCHIVES/journal_2016.org"
  			       "h:/GTD/ARCHIVES/journal_2017.org"
  			       "h:/GTD/ARCHIVES/journal_2018.org"
@@ -189,19 +188,6 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
 					 ("r" "Tasks to Refile" tags "REFILE"
 					  ((org-agenda-overriding-header "Tasks to Refile")
 					   (org-tags-match-list-sublevels nil)))
-					 ("w" "Die Aufgaben für N1286"
-					  ((tags-todo "CATEGORY=\"auswertung\"+TODO=\"TODO\"+AUSWERTUNGSAUFGABE"
-						      ((org-agenda-overriding-header "Tasks related to echosounder Data Processing")))
-					   (tags-todo "CATEGORY=\"auswertung\"+TODO=\"TODO\"+OFFIZIELLE_PROJEKT"
-						      ((org-agenda-overriding-header "Tasks related to official projects")))
-					   (tags-todo "CATEGORY=\"auswertung\"+TODO=\"TODO\"+PRIVATE_AUFGABE"
-						      ((org-agenda-overriding-header "Tasks related to personnel projects"))))
-					  nil)
-					 ("l" "Die Aufgaben für N1283"
-					  ((tags-todo "CATEGORY=\"lehrgang_modernisierung\"+TODO=\"TODO\"+OFFIZIELLE_PROJEKT"
-						      ((org-agenda-overriding-header "Tasks related to official projects")
-						       (org-tags-match-list-sublevels nil))))
-					  nil)
 					 )))
 
 
