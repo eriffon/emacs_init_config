@@ -1,0 +1,458 @@
+#+STARTUP: overview
+
+* Interface Tweaks
+
+#+BEGIN_SRC emacs-lisp
+  ;; Some information about me
+  (setq user-full-name "Jean-Guy Nistad")
+  (setq user-mail-address "jean-guy.nistad@bsh.de")
+
+  ;; Set the default directory
+  (setq default-directory "H:/" )
+
+  ;; No startup message
+  (setq inhibit-startup-message t)
+
+  ;; Remove the toobar
+  (tool-bar-mode -1)
+
+  ;; confirm by only pressing 'y' for 'yes'; 'n' for 'no'
+  (fset 'yes-or-no-p 'y-or-n-p)
+
+  ;; Visual line mode for line wrapping
+  (global-visual-line-mode)
+
+  ;; confirm by only pressing 'y' for 'yes'; 'n' for 'no'
+  (fset 'yes-or-no-p 'y-or-n-p)
+
+  ;; Convert underscore/hat + curly braces as sub-/superscripts
+  (setq org-use-sub-superscripts (quote {}))
+  (setq org-export-with-sub-superscripts (quote {}))
+  (setq package-selected-packages (quote (org try org-edna htmlize)))
+
+  ;; Custom key bindings
+  (global-set-key (kbd "<f5>") 'revert-buffer)
+  (global-set-key "\C-x\C-g" 'go-to-line)
+
+  ;; Default font size for all buffers
+  (set-face-attribute 'default nil :height 150)
+
+  ; Display the column position
+  (setq column-number-mode t)
+
+  ; Place backup files in a temporary directory
+  (setq backup-directory-alist
+  `((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms
+	`((".*" ,temporary-file-directory t)))
+
+  ; Insert the euro symbol and make it accessible with M-x euro RET
+  (fset 'euro
+     (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([24 56 return 35 120 50 48 65 67 return] 0 "%d")) arg)))
+  ; Ref: https://astrofloyd.wordpress.com/2014/08/11/insert-the-euro-symbol-e-in-emacs/
+
+  ; Set the default encoding system to UTF-8
+  (set-language-environment "UTF-8")
+
+  ; Set the ediff program to use the diff version provided by PortableGit
+  (setq ediff-diff-program "D:\\Programm\\Git\\PortableGit\\usr\\bin\\diff.exe")
+#+END_SRC
+* emacs server
+
+#+BEGIN_SRC emacs-lisp
+; Do not close the file that was being edited when C-x # is typed
+(setq server-kill-new-buffers nil)
+
+; Start the emacs server for emacsclient
+(server-start)
+#+END_SRC
+* shells
+
+This script allows using the bash shell in this Windows emacs version. Simply run: M-x run-bash
+
+Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.html#sec-1-2-2][Emacs on Microsoft Windows]]
+
+#+BEGIN_SRC emacs-lisp
+(defun run-bash ()
+      (interactive)
+      (let ((shell-file-name "D:\\Programm\\Git\\PortableGit\\bin\\bash.exe"))
+            (shell "*bash*")))
+#+END_SRC
+
+#+RESULTS:
+: run-bash
+
+* ido-mode
+  
+#+BEGIN_SRC emacs-lisp
+;; Use and configure ido-mode
+(setq indo-enable-flex-matching t)
+(setq ido-everywhere t)
+(ido-mode 1)
+
+;; Use and configure ibuffer
+;; (bound to c-x c-b)
+(defalias 'list-buffers 'ibuffer)
+#+END_SRC
+* Org-mode Stuff
+
+** General Stuff
+
+#+BEGIN_SRC emacs-lisp
+    ;; File extensions recognized as org files
+    (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\)$" . org-mode))
+
+    ;; Handling of various file extensions, possibly using external programs
+    (setq org-file-apps
+	  (quote
+	   ((auto-mode . emacs)
+	    ("\\.mm\\'" . default)
+	    ("\\.x?html?\\'" . default)
+	    ("\\.pdf\\'" . default)
+	    ("\\.docx\\'" . default)
+	    ("\\.doc\\'" . default)
+	    ("\\.png\\'" . default)
+	    ("\\.xlsx\\'" . default)
+	    ("\\.xls\\'" . default))))
+
+    ;; Avoid creating a subscript in the org-mode export when using underscores
+    (setq org-export-with-sub-superscripts nil)
+
+    ;; Add alphabetic completion to plain lists
+    (setq org-list-allow-alphabetical t)
+
+    ;; Some custom key bindings
+    (global-set-key "\C-cl" 'org-store-link)
+    (global-set-key "\C-ca" 'org-agenda)
+    (global-set-key "\C-cb" 'org-iswitchb)
+    (global-set-key "\C-cc" 'org-capture)
+    (global-set-key (kbd "<f12>") 'org-agenda)
+#+END_SRC
+** clock
+
+#+BEGIN_SRC emacs-lisp
+; Set the scope of the org clock report to subtree
+(setq org-clock-clocktable-default-properties (quote (:maxlevel 2 :scope subtree)))
+
+; Set the format of time duration to decimal units with two levels of precision
+(setq org-duration-format (quote (("h") (special . 2))))
+#+END_SRC
+
+** Tasks with TODO keywords
+
+#+BEGIN_SRC emacs-lisp
+(setq org-todo-keywords
+'((sequence "TODO(t)" "|" "NEXT(n)" "|" "DONE(d)")
+  (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELED(c@/!)")))
+
+(setq org-todo-keyword-faces
+'(("TODO" :foreground "red" :weight bold)
+  ("NEXT" :foreground "blue" :weight bold)
+  ("DONE" :foreground "forest green" :weight bold)
+  ("WAITING" :foreground "magenta" :weight bold)
+  ("CANCELED" :foreground "orange" :weight bold)
+  ("HOLD" :foreground "spruce" :weight bold)))
+#+END_SRC
+
+** agenda
+
+#+BEGIN_SRC emacs-lisp
+; Complete listing of agenda files
+(setq org-agenda-files (quote ("h:/GTD/refile.org"
+ 			       "h:/GTD/todo.org"
+  			       "h:/GTD/auswertung.org"
+  			       "h:/GTD/journal_2021.org"
+ 			       "h:/GTD/timesheet_2021.org"
+ 			       "h:/GTD/ausbildung.org"
+ 			       "h:/GTD/verwaltung.org"
+			       "h:/Projekte/Aufgaben/1804-4D-SVP/1-Admin/13-Work_plan/4dsvp_plan.org"
+ 			       "h:/GTD/ARCHIVES/journal_2016.org"
+ 			       "h:/GTD/ARCHIVES/journal_2017.org"
+ 			       "h:/GTD/ARCHIVES/journal_2018.org"
+ 			       "h:/GTD/ARCHIVES/journal_2019.org"
+ 			       "h:/GTD/ARCHIVES/journal_2020.org")))
+
+; Display the agenda buffer in the current window
+(setq org-agenda-window-setup (quote current-window))
+
+; Number of warning days before deadline date
+(setq org-deadline-warning-days 0)
+
+; Do not show TODO sub-tasks
+(setq org-agenda-todo-list-sublevels nil)
+
+; Move tags to the right in the agenda view
+(setq org-agenda-tags-column -160)
+
+; Custom agenda command definitions
+(setq org-agenda-custom-commands (quote (
+					 ("r" "Tasks to Refile" tags "REFILE"
+					  ((org-agenda-overriding-header "Tasks to Refile")
+					   (org-tags-match-list-sublevels nil)))
+					 ("w" "Die Aufgaben für N1286"
+					  ((tags-todo "CATEGORY=\"auswertung\"+TODO=\"TODO\"+AUSWERTUNGSAUFGABE"
+						      ((org-agenda-overriding-header "Tasks related to echosounder Data Processing")))
+					   (tags-todo "CATEGORY=\"auswertung\"+TODO=\"TODO\"+OFFIZIELLE_PROJEKT"
+						      ((org-agenda-overriding-header "Tasks related to official projects")))
+					   (tags-todo "CATEGORY=\"auswertung\"+TODO=\"TODO\"+PRIVATE_AUFGABE"
+						      ((org-agenda-overriding-header "Tasks related to personnel projects"))))
+					  nil)
+					 ("l" "Die Aufgaben für N1283"
+					  ((tags-todo "CATEGORY=\"lehrgang_modernisierung\"+TODO=\"TODO\"+OFFIZIELLE_PROJEKT"
+						      ((org-agenda-overriding-header "Tasks related to official projects")
+						       (org-tags-match-list-sublevels nil))))
+					  nil)
+					 )))
+
+
+      
+; Set the format of several views
+(setq org-agenda-prefix-format
+   (quote
+    ((agenda . " %-12:c%?-12t% s")
+     (timeline . " % s")
+     (todo . " %-12:c")
+     (tags . " %-12:c")
+     (search . " %-12:c"))))
+
+;; (setq org-agenda-custom-commands
+;; '(("x" todo "NEXT")))
+#+END_SRC
+** refiling
+
+#+BEGIN_SRC emacs-lisp
+; Target include this file and any file contributing to the agenda - up to 9 levels deep
+(setq org-refile-targets (quote ((nil :maxlevel . 9)
+				 (org-agenda-files :maxlevel . 9))))
+
+; Use full outline paths including filename for refile targets
+(setq org-refile-use-outline-path (quote file))
+
+; Targets complete
+(setq org-outline-path-complete-in-steps t)
+#+END_SRC
+
+** capture template
+
+#+BEGIN_SRC emacs-lisp
+(setq org-directory "h:/GTD/")
+(setq org-default-notes-file (concat org-directory "todo.org"))
+(define-key global-map "\C-cc" 'org-capture)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                   Setting up capture templates                  ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Default capture file
+(setq org-default-notes-file (concat org-directory "~/GTD/refile.org"))
+
+; Custom capture template
+(setq org-capture-templates
+'(("t" "Tasks to refile" entry (file "h:/GTD/refile.org")
+   "* TODO %^{Heading}
+%U
+
+%?")
+
+  ("j" "My personal journal of thoughts" entry (file "h:/GTD/journal_2021.org")
+   "* %^{Heading} %u")
+))
+#+END_SRC
+** babel
+
+#+BEGIN_SRC emacs-lisp
+;; enable python for in-buffer evaluation
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)))
+
+;; all python code be safe
+(defun my-org-confirm-babel-evaluate (lang body)
+(not (string= lang "python")))
+(setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
+#+END_SRC
+
+** export
+
+#+BEGIN_SRC emacs-lisp
+; Allow the following export back-ends
+(setq org-export-backends (quote (ascii beamer html icalendar latex odt org)))
+
+; Syntax highlighting for code in HTML export
+(setq org-src-fontify-natively t)
+
+; Edit the html export backend
+(setq org-html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"org2html.css\"/>")
+
+; odt export engine automatically creates a Microsoft Word file
+(setq org-odt-preferred-output-format "docx")
+
+; set the default latex compiler as xelatex
+(setq org-latex-compiler "xelatex")
+
+; Change the title of the Table for Content of a Beamer presentation from 'Ouline' to 'Inhaltsverzeichnis'
+(setq org-beamer-outline-frame-title "Inhaltsverzeichnis")
+#+END_SRC
+** publishing
+
+#+BEGIN_SRC emacs-lisp :results none
+  (setq org-publish-project-alist
+	  '(("org-files"
+	     :base-directory "h:/Projekte/Aufgaben/1804-4D-SVP/4-Reports/"
+	     :publishing-directory "x:/Nautische Hydrographie/Seevermessung/Entwicklung/Projekte/4D-SVP/Ergebnisse"
+	     :publishing-function org-html-publish-to-html
+	     :recursive t
+	     :makeindex t)
+
+	    ("images"
+	     :base-directory "h:/Projekte/Aufgaben/1804-4D-SVP/4-Reports/"
+	     :publishing-directory "x:/Nautische Hydrographie/Seevermessung/Entwicklung/Projekte/4D-SVP/Ergebnisse"
+	     :base-extension "jpg\\|gif\\|png"
+	     :publishing-function org-publish-attachment
+	     :recursive t)
+	  ("1804-4D-SVP" :components ("org-files", "images")))
+	  )
+#+END_SRC
+
+** org-ref
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-ref
+    :ensure t)
+
+  (require 'org-ref)
+
+  ;; Prevent automatic heading creation on html export
+  (setq org-ref-bib-html "")
+
+  (setq reftex-default-bibliography (quote("h:/Projekte/Aufgaben/1804-4D-SVP/4-Reports/4D-SVP_References.bib")))
+
+  (setq org-ref-default-bibliography (quote("h:/Projekte/Aufgaben/1804-4D-SVP/4-Reports/4D-SVP_References.bib")))
+
+  (setq bibtex-completion-bibliography "h:/Projekte/Aufgaben/1804-4D-SVP/4-Reports/4D-SVP_References.bib")
+#+END_SRC
+
+* YAsnippet
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :ensure t
+    :init
+    (yas-global-mode 1))
+#+END_SRC
+
+* Elpy
+
+#+BEGIN_SRC emacs-lisp
+    (use-package elpy
+      :ensure t
+      :init
+      (elpy-enable))
+
+    ;; For Elpy to recognize the 'virtualenv' python package
+    (setq elpy-rpc-virtualenv-path 'current)
+
+    ;; For elpy to use standard python interpreter (default)
+    ;;(setq python-shell-interpreter "python"
+    ;;	python-shell-interpreter-args "-i")
+
+    ;; For elpy to use ipython as the default interpreter
+    (setq python-shell-interpreter "ipython"
+	  python-shell-interpreter-args "-i --simple-prompt")
+
+    ;;(add-to-list 'python-shell-completion-native-disabled-interpreters
+;;		 "python")
+#+END_SRC
+
+* MathJax
+
+#+BEGIN_SRC emacs-lisp
+    ;; Options for the Mathjax setup
+    (setq org-html-mathjax-options (quote
+				    ((path "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML")
+				     (scale "100")
+				     (align "center")
+				     (indent "0em"))))
+
+  (setq org-html-mathjax-template (quote
+				   "<script type=\"text/x-mathjax-config\">
+      MathJax.Hub.Config({
+	  displayAlign: \"%ALIGN\",
+	  displayIndent: \"%INDENT\",
+
+	  \"HTML-CSS\": { scale: %SCALE,
+			  linebreaks: { automatic: \"false\" },
+			  webFont: \"TeX\"
+			 },
+	  SVG: {scale: %SCALE,
+		linebreaks: { automatic: \"false\" },
+		font: \"TeX\"},
+	  NativeMML: {scale: %SCALE},
+	  TeX: { equationNumbers: {autoNumber: \"AMS\"},
+		 MultLineWidth: \"85%\",
+		 TagSide: \"right\",
+		 TagIndent: \".8em\"
+	       }
+  });
+  </script>
+  <script type=\"text/javascript\"
+	  src=\"%PATH\"></script>"))
+#+END_SRC
+
+* magit
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'exec-path "D:/Programm/Git/PortableGit/bin/")
+
+  (use-package magit
+    :ensure t)
+#+END_SRC
+
+#+RESULTS:
+
+* MELPA Packages
+
+** org-bullets
+
+#+BEGIN_SRC emacs-lisp
+  ;; Load directories containing lisp files
+  (add-to-list 'load-path "~/.emacs.d/org-bullets/")
+
+  ;; org-bullets
+  (require 'org-bullets)
+  (add-hook 'org-mode-hook 'org-bullets-mode)
+#+END_SRC
+
+** themes
+
+#+BEGIN_SRC emacs-lisp
+  (use-package color-theme-modern
+    :ensure t)
+
+  (use-package zerodark-theme
+    :ensure t)
+
+  (load-theme 'zerodark t)
+#+END_SRC
+** Matlab-mode
+
+#+BEGIN_SRC emacs-lisp
+  (use-package matlab
+    :ensure matlab-mode)
+#+END_SRC
+
+#+RESULTS:
+** ace-window
+
+#+BEGIN_SRC emacs-lisp
+(use-package ace-window
+  :ensure t
+  :init
+  (progn
+    (global-set-key [remap other-window] 'ace-window)
+    (custom-set-faces
+     '(aw-leading-char-face
+       ((t (:inherit ace-jump-face-foreground :height 3.0))))) 
+))
+#+END_SRC
+
