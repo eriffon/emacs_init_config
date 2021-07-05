@@ -98,7 +98,7 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
 
 ** General Stuff
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results none
     ;; File extensions recognized as org files
     (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\)$" . org-mode))
 
@@ -111,6 +111,7 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
 	    ("\\.pdf\\'" . default)
 	    ("\\.docx\\'" . default)
 	    ("\\.doc\\'" . default)
+	    ("\\.pptx\\'" . default)
 	    ("\\.png\\'" . default)
 	    ("\\.xlsx\\'" . default)
 	    ("\\.xls\\'" . default))))
@@ -127,7 +128,9 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
     (global-set-key "\C-cb" 'org-iswitchb)
     (global-set-key "\C-cc" 'org-capture)
     (global-set-key (kbd "<f12>") 'org-agenda)
+    (global-set-key (kbd "<f11>") 'toggle-truncate-lines)
 #+END_SRC
+
 ** clock
 
 #+BEGIN_SRC emacs-lisp
@@ -320,11 +323,14 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
 
 * YAsnippet
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results none
   (use-package yasnippet
     :ensure t
     :init
-    (yas-global-mode 1))
+    (yas-global-mode 1)
+    :config
+    (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets")
+    )
 #+END_SRC
 
 * Elpy
