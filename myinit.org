@@ -393,14 +393,15 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
 
 * magit
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results none
   (add-to-list 'exec-path "D:/Programm/Git/PortableGit/bin/")
 
   (use-package magit
-    :ensure t)
+    :ensure t
+    :config (define-key magit-mode-map 
+	      (kbd "q") 
+	      (lambda() (interactive) (magit-mode-bury-buffer t))))
 #+END_SRC
-
-#+RESULTS:
 
 * MELPA Packages
 
