@@ -321,6 +321,71 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
   (setq bibtex-completion-bibliography "h:/Projekte/Aufgaben/1804-4D-SVP/4-Reports/4D-SVP_References.bib")
 #+END_SRC
 
+** Scheduler
+
+#+BEGIN_SRC emacs-lisp
+  (defun schedule-me ()
+    (interactive)
+    (org-schedule nil)
+    (let* (
+	   (element (org-element-at-point))
+           (effort (org-element-property :EFFORT element))
+	   (time
+	    (org-time-from-absolute
+	     (+
+	      effort
+	      (org-time-string-to-absolute org-last-inserted-timestamp))))
+	   (with-hm nil)
+	   (fmt (funcall (if with-hm 'cdr 'car) org-time-stamp-formats)) )
+      (org-deadline nil (format-time-string fmt time))))
+#+END_SRC
+
+#+RESULTS:
+: schedule-me
+
+#+BEGIN_SRC emacs-lisp
+  (defun org-schedule-effort ()
+    (interactive)
+    (save-excursion
+      (org-back-to-heading t)
+      (let* (
+	     (element (org-element-at-point))
+	     (effort (org-element-property :EFFORT element))
+	     (scheduled (org-element-property :scheduled element))
+	     (ts-year-start (org-element-property :year-start scheduled))
+	     (ts-month-start (org-element-property :month-start scheduled))
+	     (ts-day-start (org-element-property :day-start scheduled))
+	     (ts-hour-start (org-element-property :hour-start scheduled))
+	     (ts-minute-start (org-element-property :minute-start scheduled)) )
+	(org-schedule nil (concat
+			   (format "%s" ts-year-start)
+			   "-"
+			   (if (< ts-month-start 10)
+			       (concat "0" (format "%s" ts-month-start))
+			     (format "%s" ts-month-start))
+			   "-"
+			   (if (< ts-day-start 10)
+			       (concat "0" (format "%s" ts-day-start))
+			     (format "%s" ts-day-start))
+			   " "
+			   (if (< ts-hour-start 10)
+			       (concat "0" (format "%s" ts-hour-start))
+			     (format "%s" ts-hour-start))
+			   ":"
+			   (if (< ts-minute-start 10)
+			       (concat "0" (format "%s" ts-minute-start))
+			     (format "%s" ts-minute-start))
+			   "+"
+			   effort)) )))
+#+END_SRC
+
+#+RESULTS:
+: org-schedule-effort
+
+References:
+- [[https://stackoverflow.com/questions/32479979/org-mode-how-to-calculate-dynamic-deadlines][org-mode : how to calculate dynamic deadlines]]
+- [[https://stackoverflow.com/questions/23044588/org-mode-creation-time-range-from-effort-estimate/23067020#23067020][org-mode: creation time range from effort estimate]]
+
 * YAsnippet
 
 #+BEGIN_SRC emacs-lisp :results none
