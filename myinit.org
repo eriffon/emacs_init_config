@@ -55,7 +55,7 @@
   (set-language-environment "UTF-8")
 
   ; Set the ediff program to use the diff version provided by PortableGit
-  (setq ediff-diff-program "D:\\Programm\\Git\\PortableGit\\usr\\bin\\diff.exe")
+  (setq ediff-diff-program "C:\\Programme\\Git\\usr\\bin\\diff.exe")
 #+END_SRC
 * emacs server
 
@@ -73,10 +73,10 @@ This script allows using the bash shell in this Windows emacs version. Simply ru
 Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.html#sec-1-2-2][Emacs on Microsoft Windows]]
 
 #+BEGIN_SRC emacs-lisp
-(defun run-bash ()
-      (interactive)
-      (let ((shell-file-name "D:\\Programm\\Git\\PortableGit\\bin\\bash.exe"))
-            (shell "*bash*")))
+  (defun run-bash ()
+	(interactive)
+	(let ((shell-file-name "C:\\Programme\\Git\\bin\\bash.exe"))
+	      (shell "*bash*")))
 #+END_SRC
 
 #+RESULTS:
@@ -394,7 +394,7 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
 * magit
 
 #+BEGIN_SRC emacs-lisp :results none
-  (add-to-list 'exec-path "D:/Programm/Git/PortableGit/bin/")
+  (add-to-list 'exec-path "C:/Programme/Git/bin/")
 
   (use-package magit
     :ensure t
