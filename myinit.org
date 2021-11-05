@@ -74,17 +74,37 @@
   ;; Set the ediff program to use the diff version provided by PortableGit
   (setq ediff-diff-program "C:\\Programme\\Git\\usr\\bin\\diff.exe")
 #+END_SRC
-* emacs server
 
+* Look & Feel
+
+** Current Theme
+  
 #+BEGIN_SRC emacs-lisp
-; Do not close the file that was being edited when C-x # is typed
-(setq server-kill-new-buffers nil)
+  ;; Make theme safe to load
+  (setq custom-safe-themes
+	'("e8830baf7d8757f15d9d02f9f91e0a9c4732f63c3f7f16439cc4fb42a1f2aa06" default))
 
-; Start the emacs server for emacsclient
-(server-start)
+  (use-package zerodark-theme
+    :ensure t
+    :init (load-theme 'zerodark))
 #+END_SRC
 
-* shells
+** rainbow-delimiters
+
+#+BEGIN_SRC emacs-lisp
+;; Makes matching parenthesis easier
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+#+END_SRC
+
+* CygWin Integration
+
+#+BEGIN_SRC emacs-lisp
+  (if (file-directory-p "c:/cygwin64/bin")
+      (add-to-list 'exec-path "c:/cygwin64/bin"))
+#+END_SRC
+
+* Bash Shell
 
 This script allows using the bash shell in this Windows emacs version. Simply run: M-x run-bash
 
@@ -97,373 +117,44 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
 	      (shell "*bash*")))
 #+END_SRC
 
-#+RESULTS:
-: run-bash
+* Completion
 
-* ido-mode
-  
-#+BEGIN_SRC emacs-lisp
-;; Use and configure ido-mode
-(setq indo-enable-flex-matching t)
-(setq ido-everywhere t)
-(ido-mode 1)
-
-;; Use and configure ibuffer
-;; (bound to c-x c-b)
-(defalias 'list-buffers 'ibuffer)
-#+END_SRC
-* Org-mode Stuff
-
-** General Stuff
-
-#+BEGIN_SRC emacs-lisp :results none
-    ;; File extensions recognized as org files
-    (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\)$" . org-mode))
-
-    ;; Handling of various file extensions, possibly using external programs
-    (setq org-file-apps
-	  (quote
-	   ((auto-mode . emacs)
-	    ("\\.mm\\'" . default)
-	    ("\\.x?html?\\'" . default)
-	    ("\\.pdf\\'" . default)
-	    ("\\.docx\\'" . default)
-	    ("\\.doc\\'" . default)
-	    ("\\.pptx\\'" . default)
-	    ("\\.png\\'" . default)
-	    ("\\.xlsx\\'" . default)
-	    ("\\.xls\\'" . default))))
-
-    ;; Avoid creating a subscript in the org-mode export when using underscores
-    (setq org-export-with-sub-superscripts nil)
-
-    ;; Add alphabetic completion to plain lists
-    (setq org-list-allow-alphabetical t)
-
-    ;; Some custom key bindings
-    (global-set-key "\C-cl" 'org-store-link)
-    (global-set-key "\C-ca" 'org-agenda)
-    (global-set-key "\C-cb" 'org-iswitchb)
-    (global-set-key "\C-cc" 'org-capture)
-    (global-set-key (kbd "<f12>") 'org-agenda)
-    (global-set-key (kbd "<f11>") 'toggle-truncate-lines)
-#+END_SRC
-
-** clock
+** ivy
 
 #+BEGIN_SRC emacs-lisp
-; Set the scope of the org clock report to subtree
-(setq org-clock-clocktable-default-properties (quote (:maxlevel 2 :scope subtree)))
-
-; Set the format of time duration to decimal units with two levels of precision
-(setq org-duration-format (quote (("h") (special . 2))))
+;; Generic completion mechanism for Emac
+(use-package ivy
+  :diminish
+  :bind (("C-s" . swiper)
+         :map ivy-minibuffer-map
+         ("C-l" . ivy-alt-done)
+         ("C-j" . ivy-next-line)
+         ("C-k" . ivy-previous-line)
+         :map ivy-switch-buffer-map
+         ("C-k" . ivy-previous-line)
+         ("C-l" . ivy-done)
+         ("C-d" . ivy-switch-buffer-kill)
+         :map ivy-reverse-i-search-map
+         ("C-k" . ivy-previous-line)
+         ("C-d" . ivy-reverse-i-search-kill))
+  :config
+  (ivy-mode 1))
 #+END_SRC
 
-** Tasks with TODO keywords
+** ivy-rich
 
 #+BEGIN_SRC emacs-lisp
-(setq org-todo-keywords
-'((sequence "TODO(t)" "|" "NEXT(n)" "|" "DONE(d)")
-  (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELED(c@/!)")))
-
-(setq org-todo-keyword-faces
-'(("TODO" :foreground "red" :weight bold)
-  ("NEXT" :foreground "blue" :weight bold)
-  ("DONE" :foreground "forest green" :weight bold)
-  ("WAITING" :foreground "magenta" :weight bold)
-  ("CANCELED" :foreground "orange" :weight bold)
-  ("HOLD" :foreground "spruce" :weight bold)))
-#+END_SRC
-
-** agenda
-
-#+BEGIN_SRC emacs-lisp
-; Complete listing of agenda files
-(setq org-agenda-files (quote ("h:/GTD/refile.org"
- 			       "h:/GTD/todo.org"
-  			       "h:/GTD/auswertung.org"
-  			       "h:/GTD/journal_2021.org"
- 			       "h:/GTD/timesheet_2021.org"
- 			       "h:/GTD/ausbildung.org"
- 			       "h:/GTD/verwaltung.org"
- 			       "h:/GTD/ARCHIVES/journal_2016.org"
- 			       "h:/GTD/ARCHIVES/journal_2017.org"
- 			       "h:/GTD/ARCHIVES/journal_2018.org"
- 			       "h:/GTD/ARCHIVES/journal_2019.org"
- 			       "h:/GTD/ARCHIVES/journal_2020.org")))
-
-; Display the agenda buffer in the current window
-(setq org-agenda-window-setup (quote current-window))
-
-; Number of warning days before deadline date
-(setq org-deadline-warning-days 0)
-
-; Do not show TODO sub-tasks
-(setq org-agenda-todo-list-sublevels nil)
-
-; Move tags to the right in the agenda view
-(setq org-agenda-tags-column -160)
-
-; Custom agenda command definitions
-(setq org-agenda-custom-commands (quote (
-					 ("r" "Tasks to Refile" tags "REFILE"
-					  ((org-agenda-overriding-header "Tasks to Refile")
-					   (org-tags-match-list-sublevels nil)))
-					 )))
-
-
-      
-; Set the format of several views
-(setq org-agenda-prefix-format
-   (quote
-    ((agenda . " %-12:c%?-12t% s")
-     (timeline . " % s")
-     (todo . " %-12:c")
-     (tags . " %-12:c")
-     (search . " %-12:c"))))
-
-;; (setq org-agenda-custom-commands
-;; '(("x" todo "NEXT")))
-#+END_SRC
-** refiling
-
-#+BEGIN_SRC emacs-lisp
-; Target include this file and any file contributing to the agenda - up to 9 levels deep
-(setq org-refile-targets (quote ((nil :maxlevel . 9)
-				 (org-agenda-files :maxlevel . 9))))
-
-; Use full outline paths including filename for refile targets
-(setq org-refile-use-outline-path (quote file))
-
-; Targets complete
-(setq org-outline-path-complete-in-steps t)
-#+END_SRC
-
-** capture template
-
-#+BEGIN_SRC emacs-lisp
-(setq org-directory "h:/GTD/")
-(setq org-default-notes-file (concat org-directory "todo.org"))
-(define-key global-map "\C-cc" 'org-capture)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                   Setting up capture templates                  ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; Default capture file
-(setq org-default-notes-file (concat org-directory "~/GTD/refile.org"))
-
-; Custom capture template
-(setq org-capture-templates
-'(("t" "Tasks to refile" entry (file "h:/GTD/refile.org")
-   "* TODO %^{Heading}
-%U
-
-%?")
-
-  ("j" "My personal journal of thoughts" entry (file "h:/GTD/journal_2021.org")
-   "* %^{Heading} %u")
-))
-#+END_SRC
-** babel
-
-#+BEGIN_SRC emacs-lisp
-;; enable python for in-buffer evaluation
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((python . t)))
-
-;; all python code be safe
-(defun my-org-confirm-babel-evaluate (lang body)
-(not (string= lang "python")))
-(setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
-#+END_SRC
-
-** export
-
-#+BEGIN_SRC emacs-lisp
-; Allow the following export back-ends
-(setq org-export-backends (quote (ascii beamer html icalendar latex odt org)))
-
-; Syntax highlighting for code in HTML export
-(setq org-src-fontify-natively t)
-
-; Edit the html export backend
-(setq org-html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"org2html.css\"/>")
-
-; odt export engine automatically creates a Microsoft Word file
-(setq org-odt-preferred-output-format "docx")
-
-; set the default latex compiler as xelatex
-(setq org-latex-compiler "xelatex")
-
-; Change the title of the Table for Content of a Beamer presentation from 'Ouline' to 'Inhaltsverzeichnis'
-(setq org-beamer-outline-frame-title "Inhaltsverzeichnis")
-#+END_SRC
-** publishing
-
-#+BEGIN_SRC emacs-lisp :results none
-  (setq org-publish-project-alist
-	  '(("org-files"
-	     :base-directory "h:/Projekte/Aufgaben/1804-4D-SVP/4-Reports/"
-	     :publishing-directory "x:/Nautische Hydrographie/Seevermessung/Entwicklung/Projekte/4D-SVP/Ergebnisse"
-	     :publishing-function org-html-publish-to-html
-	     :recursive t
-	     :makeindex t)
-
-	    ("images"
-	     :base-directory "h:/Projekte/Aufgaben/1804-4D-SVP/4-Reports/"
-	     :publishing-directory "x:/Nautische Hydrographie/Seevermessung/Entwicklung/Projekte/4D-SVP/Ergebnisse"
-	     :base-extension "jpg\\|gif\\|png"
-	     :publishing-function org-publish-attachment
-	     :recursive t)
-	  ("1804-4D-SVP" :components ("org-files", "images")))
-	  )
-#+END_SRC
-
-** org-ref
-
-#+BEGIN_SRC emacs-lisp
-  (use-package org-ref
-    :ensure t)
-
-  (require 'org-ref)
-
-  ;; Prevent automatic heading creation on html export
-  (setq org-ref-bib-html "")
-
-  (setq reftex-default-bibliography (quote("h:/Projekte/Aufgaben/1804-4D-SVP/4-Reports/4D-SVP_References.bib")))
-
-  (setq org-ref-default-bibliography (quote("h:/Projekte/Aufgaben/1804-4D-SVP/4-Reports/4D-SVP_References.bib")))
-
-  (setq bibtex-completion-bibliography "h:/Projekte/Aufgaben/1804-4D-SVP/4-Reports/4D-SVP_References.bib")
-#+END_SRC
-
-* YAsnippet
-
-#+BEGIN_SRC emacs-lisp :results none
-  (use-package yasnippet
-    :ensure t
-    :init
-    (yas-global-mode 1)
-    :config
-    (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets")
-    )
-#+END_SRC
-
-* Elpy
-
-#+BEGIN_SRC emacs-lisp
-    (use-package elpy
-      :ensure t
-      :init
-      (elpy-enable))
-
-    ;; For Elpy to recognize the 'virtualenv' python package
-    (setq elpy-rpc-virtualenv-path 'current)
-
-    ;; For elpy to use standard python interpreter (default)
-    ;;(setq python-shell-interpreter "python"
-    ;;	python-shell-interpreter-args "-i")
-
-    ;; For elpy to use ipython as the default interpreter
-    (setq python-shell-interpreter "ipython"
-	  python-shell-interpreter-args "-i --simple-prompt")
-
-    ;;(add-to-list 'python-shell-completion-native-disabled-interpreters
-;;		 "python")
-#+END_SRC
-
-* MathJax
-
-#+BEGIN_SRC emacs-lisp
-    ;; Options for the Mathjax setup
-    (setq org-html-mathjax-options (quote
-				    ((path "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML")
-				     (scale "100")
-				     (align "center")
-				     (indent "0em"))))
-
-  (setq org-html-mathjax-template (quote
-				   "<script type=\"text/x-mathjax-config\">
-      MathJax.Hub.Config({
-	  displayAlign: \"%ALIGN\",
-	  displayIndent: \"%INDENT\",
-
-	  \"HTML-CSS\": { scale: %SCALE,
-			  linebreaks: { automatic: \"false\" },
-			  webFont: \"TeX\"
-			 },
-	  SVG: {scale: %SCALE,
-		linebreaks: { automatic: \"false\" },
-		font: \"TeX\"},
-	  NativeMML: {scale: %SCALE},
-	  TeX: { equationNumbers: {autoNumber: \"AMS\"},
-		 MultLineWidth: \"85%\",
-		 TagSide: \"right\",
-		 TagIndent: \".8em\"
-	       }
-  });
-  </script>
-  <script type=\"text/javascript\"
-	  src=\"%PATH\"></script>"))
-#+END_SRC
-
-* magit
-
-#+BEGIN_SRC emacs-lisp :results none
-  (add-to-list 'exec-path "C:/Programme/Git/bin/")
-
-  (use-package magit
-    :ensure t
-    :config (define-key magit-mode-map 
-	      (kbd "q") 
-	      (lambda() (interactive) (magit-mode-bury-buffer t))))
-#+END_SRC
-
-* MELPA Packages
-
-** org-bullets
-
-#+BEGIN_SRC emacs-lisp
-  ;; Load directories containing lisp files
-  (add-to-list 'load-path "~/.emacs.d/org-bullets/")
-
-  ;; org-bullets
-  (require 'org-bullets)
-  (add-hook 'org-mode-hook 'org-bullets-mode)
-#+END_SRC
-
-** themes
-
-#+BEGIN_SRC emacs-lisp
-  (use-package color-theme-modern
-    :ensure t)
-
-  (use-package zerodark-theme
-    :ensure t)
-
-  (load-theme 'zerodark t)
-#+END_SRC
-** Matlab-mode
-
-#+BEGIN_SRC emacs-lisp
-  (use-package matlab
-    :ensure matlab-mode)
-#+END_SRC
-
-#+RESULTS:
-** ace-window
-
-#+BEGIN_SRC emacs-lisp
-(use-package ace-window
-  :ensure t
+(use-package ivy-rich
   :init
-  (progn
-    (global-set-key [remap other-window] 'ace-window)
-    (custom-set-faces
-     '(aw-leading-char-face
-       ((t (:inherit ace-jump-face-foreground :height 3.0))))) 
-))
+  (ivy-rich-mode 1))
 #+END_SRC
+** counsel
 
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :bind (("M-x" . counsel-M-x)
+	   ("C-x b" . counsel-ibuffer)
+	   ("C-x C-f" . counsel-find-file)
+	   :map minibuffer-local-map
+	   ("C-r" . 'counsel-minibuffer-history)))
+#+END_SRC
