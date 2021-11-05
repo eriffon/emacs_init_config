@@ -13,8 +13,13 @@
   ;; No startup message
   (setq inhibit-startup-message t)
 
-  ;; Remove the toobar
-  (tool-bar-mode -1)
+  (scroll-bar-mode -1)        ; Disable visible scrollbar
+  (tool-bar-mode -1)          ; Disable the toolbar
+  (tooltip-mode -1)           ; Disable tooltips
+  (set-fringe-mode 10)        ; Give some breathing room
+
+  ;; Set up the visible bell
+  (setq visible-bell t)
 
   ;; confirm by only pressing 'y' for 'yes'; 'n' for 'no'
   (fset 'yes-or-no-p 'y-or-n-p)
@@ -25,6 +30,23 @@
   ;; confirm by only pressing 'y' for 'yes'; 'n' for 'no'
   (fset 'yes-or-no-p 'y-or-n-p)
 
+  ;; Text and auto-fill modes
+  (setq default-major-mode 'text-mode)
+  (add-hook 'text-mode-hook 'turn-on-auto-fill)
+
+  ;; Display line and column numbers globally (available starting in emacs > 25)
+  (column-number-mode)
+  (global-display-line-numbers-mode t)
+
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook
+		  term-mode-hook
+		  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+  ;; Set the default encoding system to UTF-8
+  (set-language-environment "UTF-8")
+
   ;; Convert underscore/hat + curly braces as sub-/superscripts
   (setq org-use-sub-superscripts (quote {}))
   (setq org-export-with-sub-superscripts (quote {}))
@@ -33,28 +55,23 @@
   ;; Custom key bindings
   (global-set-key (kbd "<f5>") 'revert-buffer)
   (global-set-key "\C-x\C-g" 'go-to-line)
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)      ;; Make ESC quit prompts
 
   ;; Default font size for all buffers
   (set-face-attribute 'default nil :height 150)
 
-  ; Display the column position
-  (setq column-number-mode t)
-
-  ; Place backup files in a temporary directory
+  ;; Place backup files in a temporary directory
   (setq backup-directory-alist
   `((".*" . ,temporary-file-directory)))
   (setq auto-save-file-name-transforms
 	`((".*" ,temporary-file-directory t)))
 
-  ; Insert the euro symbol and make it accessible with M-x euro RET
+  ;; Insert the euro symbol and make it accessible with M-x euro RET
   (fset 'euro
-     (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([24 56 return 35 120 50 48 65 67 return] 0 "%d")) arg)))
-  ; Ref: https://astrofloyd.wordpress.com/2014/08/11/insert-the-euro-symbol-e-in-emacs/
+	(lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([24 56 return 35 120 50 48 65 67 return] 0 "%d")) arg)))
+  ;; Ref: https://astrofloyd.wordpress.com/2014/08/11/insert-the-euro-symbol-e-in-emacs/
 
-  ; Set the default encoding system to UTF-8
-  (set-language-environment "UTF-8")
-
-  ; Set the ediff program to use the diff version provided by PortableGit
+  ;; Set the ediff program to use the diff version provided by PortableGit
   (setq ediff-diff-program "C:\\Programme\\Git\\usr\\bin\\diff.exe")
 #+END_SRC
 * emacs server
@@ -66,6 +83,7 @@
 ; Start the emacs server for emacsclient
 (server-start)
 #+END_SRC
+
 * shells
 
 This script allows using the bash shell in this Windows emacs version. Simply run: M-x run-bash
