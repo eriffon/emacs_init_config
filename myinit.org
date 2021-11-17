@@ -168,6 +168,7 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
  			       "h:/GTD/timesheet_2021.org"
  			       "h:/GTD/ausbildung.org"
  			       "h:/GTD/verwaltung.org"
+			       "h:/GTD/someday.org"
  			       "h:/GTD/ARCHIVES/journal_2016.org"
  			       "h:/GTD/ARCHIVES/journal_2017.org"
  			       "h:/GTD/ARCHIVES/journal_2018.org"
@@ -207,6 +208,10 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
 ;; (setq org-agenda-custom-commands
 ;; '(("x" todo "NEXT")))
 #+END_SRC
+
+#+RESULTS:
+: ((agenda .  %-12:c%?-12t% s) (timeline .  % s) (todo .  %-12:c) (tags .  %-12:c) (search .  %-12:c))
+
 ** refiling
 
 #+BEGIN_SRC emacs-lisp
