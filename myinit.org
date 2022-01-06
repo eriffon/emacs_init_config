@@ -158,3 +158,25 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
 	   :map minibuffer-local-map
 	   ("C-r" . 'counsel-minibuffer-history)))
 #+END_SRC
+
+* Templates
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :init (yas-global-mode 1)
+    :config
+    (setq yas-snippet-dirs '("h:/.emacs.d/snippets")))
+#+END_SRC
+
+* Help
+
+** which-key
+
+#+BEGIN_SRC emacs-lisp
+;; Show details about all possible key bindings
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 1))
+#+END_SRC
