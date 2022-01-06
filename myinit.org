@@ -164,8 +164,8 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
 (setq org-agenda-files (quote ("h:/GTD/refile.org"
  			       "h:/GTD/todo.org"
   			       "h:/GTD/auswertung.org"
-  			       "h:/GTD/journal_2021.org"
- 			       "h:/GTD/timesheet_2021.org"
+  			       "h:/GTD/journal_2022.org"
+ 			       "h:/GTD/timesheet_2022.org"
  			       "h:/GTD/ausbildung.org"
  			       "h:/GTD/verwaltung.org"
 			       "h:/GTD/someday.org"
@@ -173,7 +173,8 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
  			       "h:/GTD/ARCHIVES/journal_2017.org"
  			       "h:/GTD/ARCHIVES/journal_2018.org"
  			       "h:/GTD/ARCHIVES/journal_2019.org"
- 			       "h:/GTD/ARCHIVES/journal_2020.org")))
+			       "h:/GTD/ARCHIVES/journal_2020.org"
+ 			       "h:/GTD/ARCHIVES/journal_2021.org")))
 
 ; Display the agenda buffer in the current window
 (setq org-agenda-window-setup (quote current-window))
@@ -248,7 +249,7 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
 
 %?")
 
-  ("j" "My personal journal of thoughts" entry (file "h:/GTD/journal_2021.org")
+  ("j" "My personal journal of thoughts" entry (file "h:/GTD/journal_2022.org")
    "* %^{Heading} %u")
 ))
 #+END_SRC
