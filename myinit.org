@@ -166,7 +166,7 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
   			       "h:/GTD/auswertung.org"
   			       "h:/GTD/journal_2022.org"
  			       "h:/GTD/timesheet_2022.org"
- 			       "h:/GTD/ausbildung.org"
+ 			       "h:/GTD/fortbildung.org"
  			       "h:/GTD/verwaltung.org"
 			       "h:/GTD/someday.org"
  			       "h:/GTD/ARCHIVES/journal_2016.org"
