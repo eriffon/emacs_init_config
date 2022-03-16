@@ -30,9 +30,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-agenda-files
-   (quote
-    ("h:/GTD/refile.org" "h:/GTD/todo.org" "h:/GTD/auswertung.org" "h:/GTD/journal_2021.org" "h:/GTD/timesheet_2021.org" "h:/GTD/ausbildung.org" "h:/GTD/verwaltung.org" "h:/GTD/ARCHIVES/journal_2016.org" "h:/GTD/ARCHIVES/journal_2017.org" "h:/GTD/ARCHIVES/journal_2018.org" "h:/GTD/ARCHIVES/journal_2019.org" "h:/GTD/ARCHIVES/journal_2020.org")))
  '(org-html-table-default-attributes
    (quote
     (:border "2" :cellspacing "0" :cellpadding "6" :rules "groups" :frame "hsides" :class "center")))
