@@ -168,6 +168,29 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
     (setq yas-snippet-dirs '("h:/.emacs.d/snippets")))
 #+END_SRC
 
+* Python
+
+** elpy
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elpy
+    :ensure t
+    :init
+    (elpy-enable))
+#+END_SRC
+
+** jedi
+
+# source: [[https://cestlaz.github.io/posts/using-emacs-12-python/]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package jedi
+    :ensure t
+    :init
+    (add-hook 'python-mode-hook 'jedi:setup)
+    (add-hook 'python-mode-hook 'jedi:ac-setup))
+#+END_SRC
+
 * Help
 
 ** which-key
