@@ -97,6 +97,21 @@
   :hook (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
 
+* Management
+
+** org-mode
+
+   #+BEGIN_SRC emacs-lisp :results none
+     ; Allow the following export back-ends
+     (setq org-export-backends (quote (ascii beamer html latex taskjuggler)))
+   #+END_SRC
+
+** Taskjuggler
+
+#+BEGIN_SRC emacs-lisp
+  (require 'ox-taskjuggler)
+#+END_SRC
+
 * CygWin Integration
 
 #+BEGIN_SRC emacs-lisp
