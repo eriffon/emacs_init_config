@@ -1,2 +1,17 @@
 # Ignore all emacs backup file
 *~
+
+# Ignore all subfolders
+*/*
+
+# Ignore all temporary files
+.#*
+
+# Ignore other emacs generated files
+ac-comphist.dat
+bookmarks
+ido.last
+myinit.el
+network-security.data
+places
+srecode-map.el
