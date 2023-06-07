@@ -160,59 +160,66 @@ Reference: [[https://caiorss.github.io/Emacs-Elisp-Programming/Emacs_On_Windows.
 ** agenda
 
 #+BEGIN_SRC emacs-lisp
-; Complete listing of agenda files
-(setq org-agenda-files (quote ("h:/GTD/refile.org"
- 			       "h:/GTD/todo.org"
-  			       "h:/GTD/auswertung.org"
-  			       "h:/GTD/journal_2023.org"
- 			       "h:/GTD/timesheet_2023.org"
- 			       "h:/GTD/fortbildung.org"
- 			       "h:/GTD/verwaltung.org"
-			       "h:/GTD/someday.org"
- 			       "h:/GTD/ARCHIVES/journal_2016.org"
- 			       "h:/GTD/ARCHIVES/journal_2017.org"
- 			       "h:/GTD/ARCHIVES/journal_2018.org"
- 			       "h:/GTD/ARCHIVES/journal_2019.org"
-			       "h:/GTD/ARCHIVES/journal_2020.org"
-			       "h:/GTD/ARCHIVES/journal_2021.org"
- 			       "h:/GTD/ARCHIVES/journal_2022.org")))
+  ; Complete listing of agenda files
+  (setq org-agenda-files (quote ("h:/GTD/refile.org"
+				 "h:/GTD/todo.org"
+				 "h:/GTD/auswertung.org"
+				 "h:/GTD/journal_2023.org"
+				 "h:/GTD/timesheet_2023.org"
+				 "h:/GTD/fortbildung.org"
+				 "h:/GTD/verwaltung.org"
+				 "h:/GTD/someday.org"
+				 "h:/GTD/ARCHIVES/journal_2016.org"
+				 "h:/GTD/ARCHIVES/journal_2017.org"
+				 "h:/GTD/ARCHIVES/journal_2018.org"
+				 "h:/GTD/ARCHIVES/journal_2019.org"
+				 "h:/GTD/ARCHIVES/journal_2020.org"
+				 "h:/GTD/ARCHIVES/journal_2021.org"
+				 "h:/GTD/ARCHIVES/journal_2022.org")))
 
-; Display the agenda buffer in the current window
-(setq org-agenda-window-setup (quote current-window))
+  ; Display the agenda buffer in the current window
+  (setq org-agenda-window-setup (quote current-window))
 
-; Number of warning days before deadline date
-(setq org-deadline-warning-days 0)
+  ; Number of warning days before deadline date
+  (setq org-deadline-warning-days 0)
 
-; Do not show TODO sub-tasks
-(setq org-agenda-todo-list-sublevels nil)
+  ; Do not show TODO sub-tasks
+  (setq org-agenda-todo-list-sublevels nil)
 
-; Move tags to the right in the agenda view
-(setq org-agenda-tags-column -160)
+  ; Move tags to the right in the agenda view
+  (setq org-agenda-tags-column -160)
 
-; Custom agenda command definitions
-(setq org-agenda-custom-commands (quote (
-					 ("r" "Tasks to Refile" tags "REFILE"
-					  ((org-agenda-overriding-header "Tasks to Refile")
-					   (org-tags-match-list-sublevels nil)))
-					 )))
+  ; Custom agenda command definitions
+  (setq org-agenda-custom-commands (quote (
+					   ("r" "Tasks to Refile" tags "REFILE"
+					    ((org-agenda-overriding-header "Tasks to Refile")
+					     (org-tags-match-list-sublevels nil)))
+					   )))
 
 
       
-; Set the format of several views
-(setq org-agenda-prefix-format
-   (quote
-    ((agenda . " %-12:c%?-12t% s")
-     (timeline . " % s")
-     (todo . " %-12:c")
-     (tags . " %-12:c")
-     (search . " %-12:c"))))
+  ; Set the format of several views
+  (setq org-agenda-prefix-format
+     (quote
+      ((agenda . " %-12:c%?-12t% s")
+       (timeline . " % s")
+       (todo . " %-12:c")
+       (tags . " %-12:c")
+       (search . " %-12:c"))))
 
-;; (setq org-agenda-custom-commands
-;; '(("x" todo "NEXT")))
+  ;; (setq org-agenda-custom-commands
+  ;; '(("x" todo "NEXT")))
+
+  ;; Don't use visual mode line when displaying the agenda
+  ;; Ref: https://superuser.com/questions/530363/emacs-org-mode-how-to-disable-visual-line-wrap-for-agenda-buffers-only
+  (add-hook 'org-agenda-mode-hook
+	    (lambda ()
+	      (visual-line-mode -1)
+	      (toggle-truncate-lines 1)))
 #+END_SRC
 
 #+RESULTS:
-: ((agenda .  %-12:c%?-12t% s) (timeline .  % s) (todo .  %-12:c) (tags .  %-12:c) (search .  %-12:c))
+| lambda | nil | (visual-line-mode -1) | (toggle-truncate-lines 1) |
 
 ** refiling
 
